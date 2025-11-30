@@ -55,7 +55,7 @@ class ExampleTest extends TestCase
             'password' => 'password'
         ]);
 
-        $response->assertRedirect('/home'); // or your intended route after login
+        $response->assertRedirect('/home');
         $this->assertAuthenticatedAs($user);
     }
 }
