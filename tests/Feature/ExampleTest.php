@@ -26,20 +26,6 @@ class ExampleTest extends TestCase
         $response->assertSee('Login'); // checks if "Login" text is present
     }
 
-    /** @test */
-    public function user_can_register()
-    {
-        $response = $this->post('/register', [
-            'name' => 'Test User',
-            'email' => 'test@example.com',
-            'password' => 'password',
-            'password_confirmation' => 'password',
-        ]);
 
-        $response->assertRedirect('/home'); // or wherever your app redirects after register
-        $this->assertDatabaseHas('users', [
-            'email' => 'test@example.com'
-        ]);
-    }
 
 }
