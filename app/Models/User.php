@@ -2,47 +2,69 @@
 
 namespace App\Models;
 
-// use Illuminate\Contracts\Auth\MustVerifyEmail;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Foundation\Auth\User as Authenticatable;
 use Illuminate\Notifications\Notifiable;
 
 class User extends Authenticatable
 {
-    /** @use HasFactory<\Database\Factories\UserFactory> */
     use HasFactory, Notifiable;
 
-    /**
-     * The attributes that are mass assignable.
-     *
-     * @var list<string>
-     */
     protected $fillable = [
         'name',
         'email',
         'password',
+        'user_type',
+        'phone',
+        'address',
+        'city',
+        'country',
+        'latitude',
+        'longitude',
+        'vehicle_type',
+        'vehicle_model',
+        'vehicle_plate',
+        'license_number',
+        'is_available',
+        'rating',
+        'total_deliveries',
+        'bio',
+        'profile_photo',
     ];
 
-    /**
-     * The attributes that should be hidden for serialization.
-     *
-     * @var list<string>
-     */
     protected $hidden = [
         'password',
         'remember_token',
     ];
 
-    /**
-     * Get the attributes that should be cast.
-     *
-     * @return array<string, string>
-     */
     protected function casts(): array
     {
         return [
             'email_verified_at' => 'datetime',
             'password' => 'hashed',
+            'latitude' => 'decimal:8',
+            'longitude' => 'decimal:8',
+            'is_available' => 'boolean',
+            'rating' => 'decimal:2',
         ];
+    }
+    
+    public function isDriver(): bool
+    {
+        return $this->user_type === 'driver';
+    }
+    
+    public function isClient(): bool
+    {
+        return $this->user_type === 'client';
+    }
+
+    // Scope pour récupérer uniquement les drivers disponibles
+    public function scopeAvailableDrivers($query)
+    {
+        return $query->where('user_type', 'driver')
+                    ->where('is_available', true)
+                    ->whereNotNull('latitude')
+                    ->whereNotNull('longitude');
     }
 }

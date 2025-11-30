@@ -19,10 +19,10 @@ Route::middleware('guest')->group(function () {
 // middleware('auth') = only logged-in users can access these
 Route::middleware('auth')->group(function () {
     Route::get('/dashboard', function () {
-        return view('dashboard');
+        $drivers = \App\Models\User::availableDrivers()->get();
+        return view('dashboard', compact('drivers'));
     })->name('dashboard');
 
-    // Logout route - logs user out and redirects to home
     Route::post('/logout', function () {
         Auth::logout();
         request()->session()->invalidate();
@@ -30,7 +30,6 @@ Route::middleware('auth')->group(function () {
         return redirect('/');
     })->name('logout');
 });
-
 // Home page redirects to login
 Route::get('/', function () {
     return redirect()->route('login');
