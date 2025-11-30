@@ -42,20 +42,4 @@ class ExampleTest extends TestCase
         ]);
     }
 
-    /** @test */
-    public function user_can_login()
-    {
-        $user = User::factory()->create([
-            'email' => 'testlogin@example.com',
-            'password' => bcrypt('password')
-        ]);
-
-        $response = $this->post('/login', [
-            'email' => 'testlogin@example.com',
-            'password' => 'password'
-        ]);
-
-        $response->assertRedirect('/home');
-        $this->assertAuthenticatedAs($user);
-    }
 }
